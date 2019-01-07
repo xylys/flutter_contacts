@@ -44,6 +44,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         let keys = withThumbnails == true
             ? [CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
                 CNContactNoteKey,
+                CNContactUrlAddressesKey,
                CNContactEmailAddressesKey,
                CNContactPhoneNumbersKey,
                CNContactFamilyNameKey,
@@ -57,6 +58,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
                CNContactJobTitleKey] as [Any]
             : [CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
                 CNContactNoteKey,
+                CNContactUrlAddressesKey,
                CNContactEmailAddressesKey,
                CNContactPhoneNumbersKey,
                CNContactFamilyNameKey,
@@ -135,6 +137,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         contact.organizationName = dictionary["company"] as? String ?? ""
         contact.jobTitle = dictionary["jobTitle"] as? String ?? ""
         contact.note = dictionary["note"] as? String ?? ""
+        contact.url = dictionary["urlAddresses"] as? String ?? ""
         if let avatarData = (dictionary["avatar"] as? FlutterStandardTypedData)?.data {
             contact.imageData = avatarData
         }
@@ -186,6 +189,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         result["company"] = contact.organizationName
         result["jobTitle"] = contact.jobTitle
         result["note"] = contact.note
+        result["urlAddresses"] = contact.url
         if contact.isKeyAvailable(CNContactThumbnailImageDataKey) {
             if let avatarData = contact.thumbnailImageData {
                 result["avatar"] = FlutterStandardTypedData(bytes: avatarData)
