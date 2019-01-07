@@ -43,6 +43,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         let store = CNContactStore()
         let keys = withThumbnails == true
             ? [CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+                CNContactNoteKey,
                CNContactEmailAddressesKey,
                CNContactPhoneNumbersKey,
                CNContactFamilyNameKey,
@@ -53,9 +54,9 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
                CNContactPostalAddressesKey,
                CNContactOrganizationNameKey,
                CNContactThumbnailImageDataKey,
-               CNContactNoteKey,
                CNContactJobTitleKey] as [Any]
             : [CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+                CNContactNoteKey,
                CNContactEmailAddressesKey,
                CNContactPhoneNumbersKey,
                CNContactFamilyNameKey,
@@ -65,7 +66,6 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
                CNContactNameSuffixKey,
                CNContactPostalAddressesKey,
                CNContactOrganizationNameKey,
-               CNContactNoteKey,
                CNContactJobTitleKey] as [Any]
         let fetchRequest = CNContactFetchRequest(keysToFetch: keys as! [CNKeyDescriptor])
         // Set the predicate if there is a query
@@ -84,9 +84,6 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         }
         // Transform the CNContacts into dictionaries
         var result = [[String:Any]]()
-        for contact : CNContact in contacts {
-            print(contact)
-        }
         for contact : CNContact in contacts{
             result.append(contactToDictionary(contact: contact))
         }
