@@ -137,9 +137,17 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         contact.organizationName = dictionary["company"] as? String ?? ""
         contact.jobTitle = dictionary["jobTitle"] as? String ?? ""
         contact.note = dictionary["note"] as? String ?? ""
-        contact.urlAddresses = dictionary["url"] as? NSString ?? ""
         if let avatarData = (dictionary["avatar"] as? FlutterStandardTypedData)?.data {
             contact.imageData = avatarData
+        }
+
+        //URL addresses
+
+        if let urlAddresses = dictionary["urls"] as? [[String:String]] {
+            for urlAddress in urlAddresses where nil != urlAddress["value"] {
+                let urlLabel = urlAddress["label"] ?? ""
+                contact.urlAddresses.append(CNLabeledValue(label:urlLabel, value:urlAddress["value"]! as NSString))
+            }
         }
 
         //Phone numbers
@@ -189,12 +197,26 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         result["company"] = contact.organizationName
         result["jobTitle"] = contact.jobTitle
         result["note"] = contact.note
-        result["url"] = contact.urlAddresses
+        
         if contact.isKeyAvailable(CNContactThumbnailImageDataKey) {
             if let avatarData = contact.thumbnailImageData {
                 result["avatar"] = FlutterStandardTypedData(bytes: avatarData)
             }
         }
+
+        //URL 
+
+        var urlAddresses = [[String:String]]()
+        for url in contact.urlAddresses{
+            var urlDictionary = [String:String]()
+            urlDictionary["value"] = String(url.value)
+            urlDictionary["label"] = "other"
+            if let label = url.label{
+                urlDictionary["label"] = CNLabeledValue<NSString>.localizedString(forLabel: label)
+            }
+            urlAddresses.append(urlDictionary)
+        }
+        result["urls"] = urlAddresses
         
         //Phone numbers
         var phoneNumbers = [[String:String]]()
