@@ -137,7 +137,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         contact.organizationName = dictionary["company"] as? String ?? ""
         contact.jobTitle = dictionary["jobTitle"] as? String ?? ""
         contact.note = dictionary["note"] as? String ?? ""
-        contact.urlAddresses = dictionary["url"] as? String ?? ""
+        contact.urlAddresses = dictionary["url"] as? NSString ?? ""
         if let avatarData = (dictionary["avatar"] as? FlutterStandardTypedData)?.data {
             contact.imageData = avatarData
         }
