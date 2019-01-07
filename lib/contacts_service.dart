@@ -38,7 +38,8 @@ class Contact {
       this.emails,
       this.phones,
       this.postalAddresses,
-      this.avatar});
+      this.avatar,
+      this.note});
 
   String identifier,
       displayName,
@@ -48,6 +49,7 @@ class Contact {
       suffix,
       familyName,
       company,
+      note,
       jobTitle;
   Iterable<Item> emails = [];
   Iterable<Item> phones = [];
@@ -69,6 +71,7 @@ class Contact {
     postalAddresses = (m["postalAddresses"] as Iterable)
         ?.map((m) => PostalAddress.fromMap(m));
     avatar = m["avatar"];
+    note = m["note"];
   }
 
   static Map _toMap(Contact contact) {
@@ -97,7 +100,8 @@ class Contact {
       "emails": emails,
       "phones": phones,
       "postalAddresses": postalAddresses,
-      "avatar": contact.avatar
+      "avatar": contact.avatar,
+      "note": contact.note
     };
   }
 }

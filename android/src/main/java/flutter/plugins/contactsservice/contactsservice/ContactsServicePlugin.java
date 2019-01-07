@@ -76,6 +76,7 @@ public class ContactsServicePlugin implements MethodCallHandler {
       ContactsContract.Data.CONTACT_ID,
       ContactsContract.Profile.DISPLAY_NAME,
       ContactsContract.Contacts.Data.MIMETYPE,
+      ContactsContract.CommonDataKinds.Note.NOTE,
       StructuredName.DISPLAY_NAME,
       StructuredName.GIVEN_NAME,
       StructuredName.MIDDLE_NAME,
@@ -143,8 +144,8 @@ public class ContactsServicePlugin implements MethodCallHandler {
   }
 
   private Cursor getCursor(String query){
-    String selection = ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=?";
-    String[] selectionArgs = new String[]{Email.CONTENT_ITEM_TYPE, Phone.CONTENT_ITEM_TYPE, StructuredName.CONTENT_ITEM_TYPE, Organization.CONTENT_ITEM_TYPE, StructuredPostal.CONTENT_ITEM_TYPE};
+    String selection = ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=? OR " + ContactsContract.Data.MIMETYPE + "=?";
+    String[] selectionArgs = new String[]{Email.CONTENT_ITEM_TYPE, Phone.CONTENT_ITEM_TYPE, StructuredName.CONTENT_ITEM_TYPE, Organization.CONTENT_ITEM_TYPE, StructuredPostal.CONTENT_ITEM_TYPE, ContactsContract.CommonDataKinds.Note.NOTE};
     if(query != null){
       selectionArgs = new String[]{"%" + query + "%"};
       selection = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?";
@@ -180,6 +181,13 @@ public class ContactsServicePlugin implements MethodCallHandler {
         contact.prefix = cursor.getString(cursor.getColumnIndex(StructuredName.PREFIX));
         contact.suffix = cursor.getString(cursor.getColumnIndex(StructuredName.SUFFIX));
       }
+
+      //NOTES
+      else if (mimeType.equals(Note.NOTE)) {
+        contact.note = cursor.getString(cursor.getColumnIndex(Note.NOTE))
+      }
+
+
       //PHONES
       else if (mimeType.equals(Phone.CONTENT_ITEM_TYPE)){
         String phoneNumber = cursor.getString(cursor.getColumnIndex(Phone.NUMBER));
@@ -247,6 +255,12 @@ public class ContactsServicePlugin implements MethodCallHandler {
             .withValue(ContactsContract.Data.MIMETYPE, Organization.CONTENT_ITEM_TYPE)
             .withValue(Organization.COMPANY, contact.company)
             .withValue(Organization.TITLE, contact.jobTitle);
+    ops.add(op.build());
+
+    op =  ContentProviderOperation.newInsert(ContactsContract.CommonDataKinds.Note.NOTE)
+    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Note.NOTE)
+    .withValue(Note.NOTE, contact.note);
     ops.add(op.build());
 
     op.withYieldAllowed(true);

@@ -11,7 +11,7 @@ public class Contact {
     private Contact(){}
 
     String identifier;
-    String displayName, givenName, middleName, familyName, prefix, suffix, company, jobTitle;
+    String displayName, givenName, middleName, familyName, prefix, suffix, company, jobTitle, note;
     ArrayList<Item> emails = new ArrayList<>();
     ArrayList<Item> phones = new ArrayList<>();
     ArrayList<PostalAddress> postalAddresses = new ArrayList<>();
@@ -29,6 +29,7 @@ public class Contact {
         contactMap.put("company",company);
         contactMap.put("jobTitle",jobTitle);
         contactMap.put("avatar",avatar);
+        contactMap.put("note", note);
 
         ArrayList<HashMap<String,String>> emailsMap = new ArrayList<>();
         for(Item email : emails){
@@ -62,6 +63,7 @@ public class Contact {
         contact.suffix = (String)map.get("suffix");
         contact.company = (String)map.get("company");
         contact.jobTitle = (String)map.get("jobTitle");
+        contact.note = (String)map.get("note");
         contact.avatar = (byte[]) map.get("avatar");
 
         ArrayList<HashMap> emails = (ArrayList<HashMap>) map.get("emails");
