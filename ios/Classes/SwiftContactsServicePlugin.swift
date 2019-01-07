@@ -71,13 +71,17 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
                CNContactJobTitleKey] as [Any]
         let fetchRequest = CNContactFetchRequest(keysToFetch: keys as! [CNKeyDescriptor])
         // Set the predicate if there is a query
-        if let query = query{
-            fetchRequest.predicate = CNContact.predicateForContacts(matchingName: query)
-        }
+        // if let query = query{
+        //     fetchRequest.predicate = CNContact.predicateForContacts(matchingName: query)
+        // }
         // Fetch contacts
         do{
             try store.enumerateContacts(with: fetchRequest, usingBlock: { (contact, stop) -> Void in
-                contacts.append(contact)
+                for url in contact.urlAddresses {
+                    if url.value.range(of:"hypercard://") != nil { 
+                        contacts.append(contact)
+                    }
+                }
             })
         }
         catch let error as NSError {
