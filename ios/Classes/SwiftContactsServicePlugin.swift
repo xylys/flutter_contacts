@@ -80,7 +80,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
                 for url in contact.urlAddresses {
                     let u = String(url.value)
                     if u.range(of: "hypercard", options: .caseInsensitive) != nil { 
-                        print(url.value)
+                        // print(url.value)
                         contacts.append(contact)
                     }
                 }
