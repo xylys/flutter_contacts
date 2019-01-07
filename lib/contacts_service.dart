@@ -74,7 +74,7 @@ class Contact {
         ?.map((m) => PostalAddress.fromMap(m));
     avatar = m["avatar"];
     note = m["note"];
-    urls = m["urls"];
+    urls = (m["urls"] as Iterable)?.map((m) => Item.fromMap(m));
   }
 
   static Map _toMap(Contact contact) {
