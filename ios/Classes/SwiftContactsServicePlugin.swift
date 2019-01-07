@@ -53,6 +53,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
                CNContactPostalAddressesKey,
                CNContactOrganizationNameKey,
                CNContactThumbnailImageDataKey,
+               CNContactNoteKey,
                CNContactJobTitleKey] as [Any]
             : [CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
                CNContactEmailAddressesKey,
