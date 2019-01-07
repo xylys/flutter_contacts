@@ -75,7 +75,6 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         // Fetch contacts
         do{
             try store.enumerateContacts(with: fetchRequest, usingBlock: { (contact, stop) -> Void in
-                print(contacts)
                 contacts.append(contact)
             })
         }
@@ -85,6 +84,9 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         }
         // Transform the CNContacts into dictionaries
         var result = [[String:Any]]()
+        for contact : CNContact in contacts {
+            print(contact)
+        }
         for contact : CNContact in contacts{
             result.append(contactToDictionary(contact: contact))
         }
