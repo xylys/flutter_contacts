@@ -75,6 +75,7 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         // Fetch contacts
         do{
             try store.enumerateContacts(with: fetchRequest, usingBlock: { (contact, stop) -> Void in
+                print(contacts)
                 contacts.append(contact)
             })
         }
