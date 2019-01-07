@@ -78,7 +78,8 @@ public class SwiftContactsServicePlugin: NSObject, FlutterPlugin {
         do{
             try store.enumerateContacts(with: fetchRequest, usingBlock: { (contact, stop) -> Void in
                 for url in contact.urlAddresses {
-                    if url.value.range(of: "hypercard", options: .caseInsensitive) != nil { 
+                    let u = String(url.value)
+                    if u.range(of: "hypercard", options: .caseInsensitive) != nil { 
                         print(url.value)
                         contacts.append(contact)
                     }
